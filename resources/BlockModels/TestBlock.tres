@@ -1,0 +1,4 @@
+[gd_resource type="VoxelBlockyModelCube" format=3 uid="uid://dv1r5byohsqw7"]
+
+[resource]
+color = Color(0, 0, 1, 1)

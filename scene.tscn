@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkho5qg067yj5"]
+
+[ext_resource type="VoxelGeneratorNoise2D" uid="uid://dcnflobh5cdpc" path="res://resources/World/NoiseGenerators/TestNoise2D.tres" id="1_nw3ui"]
+[ext_resource type="Script" path="res://resources/Scripts/TestScript.cs" id="1_o5b7a"]
+[ext_resource type="VoxelMesherBlocky" uid="uid://dqil7ynqcym84" path="res://resources/Meshers/BlockyMesher.tres" id="2_4jvak"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qn5k7"]
+vertex_color_use_as_albedo = true
+
+[node name="Scene" type="Node3D"]
+script = ExtResource("1_o5b7a")
+
+[node name="VoxelTerrain" type="VoxelTerrain" parent="."]
+generator = ExtResource("1_nw3ui")
+mesher = ExtResource("2_4jvak")
+material_override = SubResource("StandardMaterial3D_qn5k7")

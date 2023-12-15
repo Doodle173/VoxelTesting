@@ -1,0 +1,7 @@
+[gd_resource type="VoxelBlockyLibrary" load_steps=3 format=3 uid="uid://dtfrtlbc3s2be"]
+
+[ext_resource type="VoxelBlockyModelEmpty" uid="uid://dw5n0aws1cqdh" path="res://resources/BlockModels/Air.tres" id="1_ynbd3"]
+[ext_resource type="VoxelBlockyModelCube" uid="uid://dv1r5byohsqw7" path="res://resources/BlockModels/TestBlock.tres" id="2_pk6wm"]
+
+[resource]
+models = Array[VoxelBlockyModel]([ExtResource("1_ynbd3"), ExtResource("2_pk6wm")])
