@@ -1,16 +1,152 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkho5qg067yj5"]
+[gd_scene load_steps=18 format=3 uid="uid://dkho5qg067yj5"]
 
 [ext_resource type="VoxelGeneratorNoise2D" uid="uid://dcnflobh5cdpc" path="res://resources/World/NoiseGenerators/TestNoise2D.tres" id="1_nw3ui"]
 [ext_resource type="Script" path="res://resources/Scripts/TestScript.cs" id="1_o5b7a"]
 [ext_resource type="VoxelMesherBlocky" uid="uid://dqil7ynqcym84" path="res://resources/Meshers/BlockyMesher.tres" id="2_4jvak"]
+[ext_resource type="Script" path="res://quality-godot-first-person-2-93bb50b9fa91df05a50517dd7f34ffd58ea269b6/addons/fpc/character.gd" id="4_hpsnt"]
+[ext_resource type="PackedScene" uid="uid://3mij3cjhkwsm" path="res://quality-godot-first-person-2-93bb50b9fa91df05a50517dd7f34ffd58ea269b6/addons/fpc/reticles/reticle_1.tscn" id="5_nt413"]
+[ext_resource type="Script" path="res://quality-godot-first-person-2-93bb50b9fa91df05a50517dd7f34ffd58ea269b6/addons/fpc/debug.gd" id="6_1jkmk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h66do"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_1rt0i"]
+sky_material = SubResource("ProceduralSkyMaterial_h66do")
+
+[sub_resource type="Environment" id="Environment_rf0n7"]
+background_mode = 2
+sky = SubResource("Sky_1rt0i")
+tonemap_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qn5k7"]
 vertex_color_use_as_albedo = true
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp17n"]
+albedo_color = Color(0.909804, 0.596078, 0, 1)
+clearcoat_enabled = true
+clearcoat_roughness = 0.2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jw1de"]
+material = SubResource("StandardMaterial3D_kp17n")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uy03j"]
+
+[sub_resource type="Animation" id="Animation_gh776"]
+resource_name = "RESET"
+length = 0.001
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lrqmv"]
+resource_name = "headbob"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.05, -0.05, 0), Vector3(0, 0, 0), Vector3(0.05, -0.05, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o0unb"]
+_data = {
+"RESET": SubResource("Animation_gh776"),
+"headbob": SubResource("Animation_lrqmv")
+}
+
+[sub_resource type="Theme" id="Theme_wdf0f"]
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10
+
 [node name="Scene" type="Node3D"]
 script = ExtResource("1_o5b7a")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rf0n7")
 
 [node name="VoxelTerrain" type="VoxelTerrain" parent="."]
 generator = ExtResource("1_nw3ui")
 mesher = ExtResource("2_4jvak")
 material_override = SubResource("StandardMaterial3D_qn5k7")
+
+[node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "CAMERA_ANIMATION")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.29332, -31.9235)
+script = ExtResource("4_hpsnt")
+HEAD = NodePath("Head")
+CAMERA = NodePath("Head/Camera")
+CAMERA_ANIMATION = NodePath("Head/camera_animation")
+CROUCH = "crouch"
+SPRINT = "sprint"
+
+[node name="Mesh" type="MeshInstance3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_jw1de")
+
+[node name="Collision" type="CollisionShape3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_uy03j")
+
+[node name="Head" type="Node3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera" type="Camera3D" parent="Character/Head"]
+transform = Transform3D(0.999511, 0.000977888, -0.0312559, 0, 0.999511, 0.0312712, 0.0312712, -0.0312559, 0.999022, 0, 0, 0)
+
+[node name="camera_animation" type="AnimationPlayer" parent="Character/Head"]
+libraries = {
+"": SubResource("AnimationLibrary_o0unb")
+}
+blend_times = [&"headbob", &"RESET", 0.5, &"RESET", &"headbob", 0.5, &"RESET", &"RESET", 0.5]
+
+[node name="UserInterface" type="Control" parent="Character"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Reticle_1" parent="Character/UserInterface" node_paths=PackedStringArray("reticle_lines", "character") instance=ExtResource("5_nt413")]
+layout_mode = 1
+reticle_lines = [NodePath("top"), NodePath("left"), NodePath("right"), NodePath("bottom")]
+character = NodePath("../..")
+
+[node name="DebugPanel" type="PanelContainer" parent="Character/UserInterface"]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 453.0
+offset_bottom = 50.0
+theme = SubResource("Theme_wdf0f")
+script = ExtResource("6_1jkmk")
+
+[node name="MarginContainer" type="MarginContainer" parent="Character/UserInterface/DebugPanel"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Character/UserInterface/DebugPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="VoxelViewer" type="VoxelViewer" parent="Character"]
+
+[editable path="Character/UserInterface/Reticle_1"]
