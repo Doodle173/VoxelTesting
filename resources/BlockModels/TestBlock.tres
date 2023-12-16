@@ -2,3 +2,4 @@
 
 [resource]
 color = Color(0, 0, 1, 1)
+atlas_size_in_tiles = Vector2i(8, 8)
