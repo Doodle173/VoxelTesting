@@ -89,7 +89,7 @@ mesher = ExtResource("2_4jvak")
 material_override = SubResource("StandardMaterial3D_qn5k7")
 
 [node name="Character" type="CharacterBody3D" parent="." node_paths=PackedStringArray("HEAD", "CAMERA", "CAMERA_ANIMATION")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.29332, -31.9235)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.3542, -33.0569)
 script = ExtResource("4_hpsnt")
 HEAD = NodePath("Head")
 CAMERA = NodePath("Head/Camera")

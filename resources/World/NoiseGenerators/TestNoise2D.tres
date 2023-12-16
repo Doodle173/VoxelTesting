@@ -1,6 +1,7 @@
 [gd_resource type="VoxelGeneratorNoise2D" load_steps=2 format=3 uid="uid://dcnflobh5cdpc"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_5v0m6"]
+frequency = 0.0009
 
 [resource]
 channel = 0
